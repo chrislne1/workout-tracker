@@ -1,0 +1,20 @@
+# Local full stack: docker compose up --build  ->  http://localhost:3000
+services:
+  db:
+    image: postgres:16-alpine
+    environment: { POSTGRES_DB: overload, POSTGRES_USER: overload, POSTGRES_PASSWORD: overload }
+    volumes: [pgdata:/var/lib/postgresql/data]
+  backend:
+    build: ./backend
+    depends_on: [db]
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/overload
+      DATABASE_USER: overload
+      DATABASE_PASSWORD: overload
+    ports: ["8080:8080"]   # Swagger UI: http://localhost:8080/swagger-ui.html
+  frontend:
+    build: ./frontend
+    depends_on: [backend]
+    ports: ["3000:80"]
+volumes:
+  pgdata:
