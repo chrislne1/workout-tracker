@@ -16,7 +16,7 @@ Or the whole stack with Postgres: `docker compose up --build` then open http://l
 ## Tests
 `cd backend && mvn test` runs JUnit 5 + Mockito unit tests (1RM math, volume, regression threshold, analytics, trend exclusion) and `@WebMvcTest` tests (regression endpoint, validation, 404/400/500 problem-details).
 
-## Deploy for $0
+## Deployment
 * **Database:** create a Neon or Supabase Postgres. Flyway runs the migrations on first boot.
 * **Backend (Render, Docker):** root dir `backend`. Env vars: `DATABASE_URL` (JDBC form, e.g. `jdbc:postgresql://HOST/DB?sslmode=require`), `DATABASE_USER`, `DATABASE_PASSWORD`, `CORS_ORIGINS` (your frontend URL).
 * **Frontend (Vercel):** root dir `frontend`, env `VITE_API_URL=https://<your-render-service>.onrender.com`.
@@ -27,3 +27,14 @@ Or the whole stack with Postgres: `docker compose up --build` then open http://l
 * Warm-up sets are excluded from every volume, 1RM, PR and trend calculation.
 * The >10% regression check runs when you tap **Finish exercise** (so a half-finished exercise never triggers it): `GET /api/sessions/{id}/regression?variantId=`.
 * Sessions tagged `PURPOSEFUL_DELOAD` or `INJURY_DISCOMFORT` stay in history but are left out of the progression-velocity trendline.
+* Backend: 
+    * cd backend && mvn spring-boot:run "-Dspring-boot.run.profiles=dev"
+    * Backend Server: http://localhost:8080/swagger-ui/index.html
+* Frontend:
+    * cd frontend && npm run dev
+    * Frontend Server: http://localhost:5173/
+* DataBase
+    * docker compose up
+    * Database is changed from backend/src/main/resources/db/migration
+* Test
+    * cd backend && mvn test
